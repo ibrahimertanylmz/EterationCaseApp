@@ -1,0 +1,88 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="com.eteration.presentation.ProductFilterFragment">
+
+    <!-- Sort By Section -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sort By"
+        android:textStyle="bold"/>
+
+    <RadioGroup
+        android:id="@+id/sortByRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/sortOldToNew"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Old to new"/>
+
+        <RadioButton
+            android:id="@+id/sortNewToOld"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New to old"/>
+
+        <RadioButton
+            android:id="@+id/sortPriceLowToHigh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Price low to high"/>
+    </RadioGroup>
+
+    <!-- Brand Filter Section -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Brand"
+        android:textStyle="bold"/>
+
+    <SearchView
+        android:id="@+id/brandSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/brandChipGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:singleSelection="false">
+        <!-- Chips for each brand (will be dynamically added) -->
+    </com.google.android.material.chip.ChipGroup>
+
+    <!-- Model Filter Section -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Model"
+        android:textStyle="bold"/>
+
+    <SearchView
+        android:id="@+id/modelSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/modelChipGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:singleSelection="false">
+        <!-- Chips for each model (will be dynamically added) -->
+    </com.google.android.material.chip.ChipGroup>
+
+    <!-- Apply Filter Button -->
+    <Button
+        android:id="@+id/applyFilterButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Apply Filter"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout>

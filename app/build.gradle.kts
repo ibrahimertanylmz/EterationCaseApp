@@ -32,6 +32,7 @@ android {
     }
     buildFeatures {
         dataBinding = true
+        viewBinding = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -76,4 +77,14 @@ dependencies {
     implementation(libs.gsonConverter)
     implementation(libs.moshi)
     implementation(libs.moshiConverter)
+
+    //paging - glide - recyclerview
+    implementation(libs.glide)
+    implementation(libs.paging)
+    implementation(libs.recyclerview)
+
+    //room
+    implementation(libs.roomKtx)
+    implementation(libs.roomRuntime)
+    kapt(libs.roomCompiler)
 }

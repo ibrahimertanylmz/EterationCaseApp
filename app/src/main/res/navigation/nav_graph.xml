@@ -3,7 +3,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
+    app:startDestination="@id/fragmentProduct">
 
-    >
+    <fragment
+        android:id="@+id/fragmentProduct"
+        android:name="com.eteration.presentation.ProductFragment"
+        android:label="@string/title_products"
+        tools:layout="@layout/fragment_product">
+        <action
+            android:id="@+id/action_productFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailFragment" >
+            <argument
+                android:name="product"
+                app:argType="com.eteration.domain.model.Product" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/productDetailFragment"
+        android:name="com.eteration.presentation.ProductDetailFragment"
+        android:label="Product Detail"
+        tools:layout="@layout/fragment_product_detail">
+        <argument
+            android:name="product"
+            app:argType="com.eteration.domain.model.Product" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.eteration.presentation.CartFragment"
+        android:label="Cart" />
+
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.eteration.presentation.FavoritesFragment"
+        android:label="Favorites" />
 
 </navigation>
