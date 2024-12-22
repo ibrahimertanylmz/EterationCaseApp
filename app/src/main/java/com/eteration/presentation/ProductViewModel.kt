@@ -16,6 +16,10 @@ import com.eteration.data.repository.ProductPagingSource
 import com.eteration.domain.model.FilterParams
 import com.eteration.domain.model.Product
 import com.eteration.domain.repository.ProductRepository
+import com.eteration.domain.use_case.AddToCartUseCase
+import com.eteration.domain.use_case.GetBookmarksUseCase
+import com.eteration.domain.use_case.GetCartItemsUseCase
+import com.eteration.domain.use_case.RemoveFromCartUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,33 +35,50 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductViewModel @Inject constructor(
     private val repository: ProductRepository,
+    private val addToCartUseCase: AddToCartUseCase,
+    private val getBookmarksUseCase: GetBookmarksUseCase,
+    private val getCartItemsUseCase: GetCartItemsUseCase,
+    private val removeFromCartUseCase: RemoveFromCartUseCase,
     appDispatcher: Dispatcher
 ) : BaseViewModel(appDispatcher) {
 
+    val selectedBrand = MutableLiveData<String>()
+
+
     //val productList: Flow<PagingData<Product>> = repository.getProducts().cachedIn(viewModelScope)
 
+    val bookmarkedIdsFlow = getBookmarksUseCase().map { it.map { product -> product.id } }
+    val inChartIdsFlow = getCartItemsUseCase().map { it.map { product -> product.id } }
+
+    private val _pagingSourceInvalidation = MutableLiveData<Unit>()
+    val pagingSourceInvalidation: LiveData<Unit> get() = _pagingSourceInvalidation
+
+    private fun invalidatePagingSource() {
+        _pagingSourceInvalidation.postValue(Unit)
+    }
+
+    // Observe changes and trigger invalidation when updated
+    fun observeChangesAndInvalidate() {
+        viewModelScope.launch {
+            // Use combine to listen for changes in both flows
+            combine(bookmarkedIdsFlow, inChartIdsFlow) { bookmarkedIds, inChartIds ->
+                invalidatePagingSource()
+            }.collect {  }
+        }
+    }
+
     private val searchQuery = MutableStateFlow<String>("")
-    private val _filterParams = MutableStateFlow(FilterParams())
+    private val _filterParams = MutableStateFlow(FilterParams()) // Your filter params class
+    val filterParams: StateFlow<FilterParams> = _filterParams
 
 
     private val _filteredProducts = MutableLiveData<PagingData<Product>>()
     //val filteredProducts: LiveData<PagingData<Product>> = _filteredProducts
 
     private var nameFilter: String? = null
-    private var brandFilter: String? = null
+    var brandFilter: String? = null
 
-    /*fun loadProducts() {
-        viewModelScope.launch {
-            repository.getProducts(nameFilter, brandFilter)
-                .flow
-                .cachedIn(viewModelScope)
-                .collectLatest { pagingData ->
-                    _filteredProducts.postValue(pagingData)
-                }
-        }
-    }
 
-     */
 
     /*fun applyFilters(name: String? = null, brand: String? = null, sort: String? = null, model: String? = null) {
         nameFilter = name
@@ -85,15 +106,23 @@ class ProductViewModel @Inject constructor(
     }
 
 
-    fun addToCart(productId: String, quantity: Int = 1) {
-        viewModelScope.launch {
-            repository.addToCart(productId, quantity)
-        }
-    }
-
 
     // 🔥 Kullanıcının arama sorgusunu güncelle
     fun setSearchQuery(query: String) {
         searchQuery.value = query
     }
+
+    fun addToCart(product: Product) {
+        viewModelScope.launch {
+            product.cartQuantity += 1
+            addToCartUseCase(product)
+        }
+    }
+
+    fun removeFromCart(productId: String) {
+        viewModelScope.launch {
+            removeFromCartUseCase(productId)
+        }
+    }
+
 }

@@ -33,13 +33,14 @@ class ProductDetailFragment: Fragment(R.layout.fragment_product_detail) {
         binding.addToBookmarkImage.setOnClickListener {
             product.isBookmarked = true
             binding.product = product
-            viewModel.toggleBookmark(product.id)
+            viewModel.addToBookmarks(product)
         }
 
         binding.removeBookmarkImage.setOnClickListener {
             product.isBookmarked = false
             binding.product = product
-            viewModel.toggleBookmark(product.id)
+            viewModel.removeFromBookmarks(product.id)
+            //viewModel.toggleBookmark(product.id)
         }
     }
 }

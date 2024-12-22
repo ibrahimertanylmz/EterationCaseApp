@@ -10,23 +10,21 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ProductDao {
 
-    // 2️⃣ Bookmark Queries
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertBookmark(bookmark: BookmarkEntity)
-
-    @Query("DELETE FROM bookmarks WHERE productId = :productId")
-    suspend fun deleteBookmark(productId: String)
-
-    @Query("SELECT productId FROM bookmarks")
-    fun getAllBookmarkedIds(): Flow<List<String>>
-
-    // 3️⃣ Cart Queries
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addToCart(cartItem: CartEntity)
-
-    @Query("DELETE FROM cart WHERE productId = :productId")
-    suspend fun removeFromCart(productId: String)
-
     @Query("SELECT * FROM cart")
-    fun getAllCartItems(): Flow<List<CartEntity>>
+    fun getCartItems(): Flow<List<CartEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCartItem(cartEntity: CartEntity)
+
+    @Query("DELETE FROM cart WHERE id = :productId")
+    suspend fun deleteCartItem(productId: String)
+
+    @Query("SELECT * FROM bookmarks")
+    fun getBookmarks(): Flow<List<BookmarkEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertBookmark(bookmarkEntity: BookmarkEntity)
+
+    @Query("DELETE FROM bookmarks WHERE id = :productId")
+    suspend fun deleteBookmark(productId: String)
 }

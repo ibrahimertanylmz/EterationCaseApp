@@ -1,67 +1,96 @@
 package com.eteration.presentation
 
+import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
+import android.util.Log
 import android.view.View
-import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.eteration.app.R
 import com.eteration.app.databinding.FragmentProductFilterBinding
-import com.google.android.material.chip.Chip
+import com.eteration.domain.model.BrandFilterOption
+import com.eteration.presentation.adapter.BrandFilterAdapter
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ProductFilterFragment : DialogFragment() {
+class ProductFilterFragment : BottomSheetDialogFragment(R.layout.fragment_product_filter) {
 
     private var listener: OnFilterAppliedListener? = null
-    private val viewModel: ProductViewModel by viewModels()
+    private val viewModel: ProductViewModel by activityViewModels()
     private lateinit var binding: FragmentProductFilterBinding
+
+    private lateinit var brandFilterAdapter: BrandFilterAdapter
+    private val brandFilterOptions = mutableListOf(
+        BrandFilterOption("Lamborghini"),
+        BrandFilterOption("Ferrari"),
+        BrandFilterOption("Ford")
+    )
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding = FragmentProductFilterBinding.bind(view)
         //setupFilterOptions()
-    }
+
+        val brands = listOf("Lamborghini", "Ferrari", "Ford")
+
+        // Initialize the RecyclerView Adapter
+        brandFilterAdapter = BrandFilterAdapter(brandFilterOptions) { selectedBrand ->
+            // Update ViewModel with selected brands
+            //viewModel.updateFilter(brand = )
+        }
+
+        binding.recyclerViewBrandFilter.visibility = View.VISIBLE
+        binding.recyclerViewBrandFilter.layoutManager = LinearLayoutManager(requireContext())
 
 
-    private fun setupFilterOptions() {
-        binding.brandChipGroup.setOnCheckedChangeListener { group, checkedId ->
-            val selectedBrands = group.checkedChipIds.mapNotNull { id ->
-                binding.brandChipGroup.findViewById<Chip>(id).text.toString()
-            }
-            /*viewModel.applyFilters(
-                brand = selectedBrand,
-                models = getSelectedModels()
-            )
+        binding.updateFiltersButton.setOnClickListener {
+            /*val brandFilter =  brandFilterOptions.filter { it.isSelected }.map { it.name }.first()
+            listener?.onFilterApplied(brandFilter)
+            dismiss() // Dialog'u kapat
 
              */
+
+            //viewModel.selectedBrand.value = brandFilterOptions.filter { it.isSelected }.map { it.name }.first()
+            viewModel.updateFilter(brand = "Mercedes Benz")
+            //requireActivity().supportFragmentManager.popBackStack()
+            dismiss()
+
         }
 
-        // Handling sorting options
-        binding.sortByRadioGroup.setOnCheckedChangeListener { group, checkedId ->
-            val sort = when (checkedId) {
-                R.id.sortOldToNew -> "old_to_new"
-                R.id.sortNewToOld -> "new_to_old"
-                R.id.sortPriceLowToHigh -> "price_low_to_high"
-                else -> null
-            }
-            //viewModel.applyFilters(sort = sort)
+        binding.recyclerViewBrandFilter.adapter = brandFilterAdapter
+        brandFilterAdapter.submitList(brandFilterOptions)
+        Log.d("ProductFilterFragment", "Brand Options: $brandFilterOptions")
+
+
+        // Setup search functionality
+        binding.searchBrandEditText.addTextChangedListener { text ->
+            filterBrands(text.toString())
         }
 
-        // Apply Filter Button
-        binding.applyFilterButton.setOnClickListener {
-            listener?.onFilterApplied()
-            dismiss()  // Close the filter dialog
-        }
+
     }
+
+    private fun filterBrands(query: String) {
+        val filteredBrands = brandFilterOptions.filter { it.name.contains(query, ignoreCase = true) }
+        if (filteredBrands.isNotEmpty()) brandFilterAdapter.submitList(filteredBrands.toList())
+    }
+
+    private fun getSelectedBrands(): List<String> {
+        return brandFilterOptions.filter { it.isSelected }.map { it.name }
+    }
+
 
 
 
     // Interface to communicate back to the parent fragment or activity
     interface OnFilterAppliedListener {
-        fun onFilterApplied()
+        fun onFilterApplied(brandFilter: String)
     }
 
     fun setOnFilterAppliedListener(listener: OnFilterAppliedListener) {

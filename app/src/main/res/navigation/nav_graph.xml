@@ -12,12 +12,22 @@
         tools:layout="@layout/fragment_product">
         <action
             android:id="@+id/action_productFragment_to_productDetailsFragment"
-            app:destination="@id/productDetailFragment" >
+            app:destination="@id/productDetailFragment">
             <argument
                 android:name="product"
                 app:argType="com.eteration.domain.model.Product" />
         </action>
+        <action
+            android:id="@+id/action_productFragment_to_productFilterFragment"
+            app:destination="@id/productFilterFragment">
+        </action>
     </fragment>
+
+    <fragment
+        android:id="@+id/productFilterFragment"
+        android:name="com.eteration.presentation.ProductFilterFragment"
+        android:label="Filter"
+        tools:layout="@layout/fragment_product_filter" />
 
     <fragment
         android:id="@+id/productDetailFragment"
@@ -37,6 +47,15 @@
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.eteration.presentation.FavoritesFragment"
-        android:label="Favorites" />
+        android:label="Favorites">
+        <action
+            android:id="@+id/action_favoritesFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailFragment">
+            <argument
+                android:name="product"
+                app:argType="com.eteration.domain.model.Product" />
+        </action>
+
+    </fragment>
 
 </navigation>

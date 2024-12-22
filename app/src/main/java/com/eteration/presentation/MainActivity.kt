@@ -2,9 +2,11 @@ package com.eteration.presentation
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -14,10 +16,14 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    private val cartBadgeViewModel: CartBadgeViewModel by viewModels()
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val binding: ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val navHostFragment =
@@ -32,5 +38,20 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigationView = binding.bottomNavigation
         bottomNavigationView.setupWithNavController(navController)
 
+        cartBadgeViewModel.cartItemCount.observe(this) { count ->
+         updateCartBadge(count)
+        }
+
     }
+
+    private fun updateCartBadge(count: Int) {
+        val badge = binding.bottomNavigation.getOrCreateBadge(R.id.cartFragment)
+        if (count > 0) {
+            badge.isVisible = true
+            badge.number = count
+        } else {
+            badge.isVisible = false
+        }
+    }
+
 }

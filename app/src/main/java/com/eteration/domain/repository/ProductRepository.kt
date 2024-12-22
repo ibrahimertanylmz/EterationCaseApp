@@ -13,10 +13,13 @@ interface ProductRepository {
     fun getProducts( nameFilter: String? = null,
                      brandFilter: String? = null):  Flow<PagingData<Product>>
 
+
     suspend fun getProductsFiltered(category: String): Flow<PagingData<ProductResponse>>
 
-    suspend fun toggleBookmark(productId: String)
-    suspend fun addToCart(productId: String, quantity: Int)
+    fun getCartItems(): Flow<List<Product>>
+    suspend fun updateCartProduct(product: Product)
     suspend fun removeFromCart(productId: String)
-    fun getCartItems(): Flow<List<CartEntity>>
+    fun getBookmarks(): Flow<List<Product>>
+    suspend fun addToBookmarks(product: Product)
+    suspend fun removeFromBookmarks(productId: String)
 }

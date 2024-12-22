@@ -10,6 +10,12 @@ import com.eteration.data.local.ProductDao
 import com.eteration.data.remote.service.ProductService
 import com.eteration.data.repository.ProductRepositoryImpl
 import com.eteration.domain.repository.ProductRepository
+import com.eteration.domain.use_case.AddToBookmarksUseCase
+import com.eteration.domain.use_case.AddToCartUseCase
+import com.eteration.domain.use_case.GetBookmarksUseCase
+import com.eteration.domain.use_case.GetCartItemsUseCase
+import com.eteration.domain.use_case.RemoveFromBookmarksUseCase
+import com.eteration.domain.use_case.RemoveFromCartUseCase
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -66,6 +72,38 @@ object AppModule {
         productDao: ProductDao
     ): ProductRepository {
         return ProductRepositoryImpl(productService, productDao)
+    }
+
+
+    // Provide UseCase Instances
+    @Provides
+    fun provideGetCartItemsUseCase(repository: ProductRepository): GetCartItemsUseCase {
+        return GetCartItemsUseCase(repository)
+    }
+
+    @Provides
+    fun provideAddToCartUseCase(repository: ProductRepository): AddToCartUseCase {
+        return AddToCartUseCase(repository)
+    }
+
+    @Provides
+    fun provideGetBookmarksUseCase(repository: ProductRepository): GetBookmarksUseCase {
+        return GetBookmarksUseCase(repository)
+    }
+
+    @Provides
+    fun provideAddToBookmarksUseCase(repository: ProductRepository): AddToBookmarksUseCase {
+        return AddToBookmarksUseCase(repository)
+    }
+
+    @Provides
+    fun removeFromBookmarksUseCase(repository: ProductRepository): RemoveFromBookmarksUseCase {
+        return RemoveFromBookmarksUseCase(repository)
+    }
+
+    @Provides
+    fun removeFromCartUseCase(repository: ProductRepository): RemoveFromCartUseCase {
+        return RemoveFromCartUseCase(repository)
     }
 
 }

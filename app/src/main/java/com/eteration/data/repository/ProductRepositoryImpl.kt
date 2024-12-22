@@ -3,54 +3,77 @@ package com.eteration.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.eteration.common.Resource
-import com.eteration.data.local.BookmarkEntity
-import com.eteration.data.local.CartEntity
 import com.eteration.data.local.ProductDao
+import com.eteration.data.mapping.toBookmarkEntity
+import com.eteration.data.mapping.toCartEntity
+import com.eteration.data.mapping.toProduct
 import com.eteration.data.remote.model.ProductResponse
 import com.eteration.data.remote.service.ProductService
 import com.eteration.domain.model.Product
 import com.eteration.domain.repository.ProductRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 
-class ProductRepositoryImpl @Inject constructor(private val service: ProductService, private val productDao: ProductDao) : ProductRepository {
-    override fun getProducts(nameFilter: String?, brandFilter: String?):  Flow<PagingData<Product>> {
-        return Pager(
-            config = PagingConfig(pageSize = 4, enablePlaceholders = false),
-            pagingSourceFactory = { ProductPagingSource(service, nameFilter, brandFilter, productDao) }
-        ).flow
+class ProductRepositoryImpl @Inject constructor(
+    private val service: ProductService,
+    private val productDao: ProductDao
+) : ProductRepository {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getProducts(nameFilter: String?, brandFilter: String?): Flow<PagingData<Product>> {
+        val pager = Pager(
+            config = PagingConfig(pageSize = 20, enablePlaceholders = false),
+            pagingSourceFactory = {
+                ProductPagingSource(
+                    service,
+                    nameFilter,
+                    brandFilter,
+                    productDao
+                )
+            }
+        )
+
+        return productDao.getBookmarks().distinctUntilChanged()
+            .flatMapLatest {
+                pager.flow
+            }
     }
 
     override suspend fun getProductsFiltered(category: String): Flow<PagingData<ProductResponse>> {
         TODO("Not yet implemented")
     }
 
-    // 2️⃣ Toggle bookmark (add or remove)
-    override suspend fun toggleBookmark(productId: String) {
-        val currentBookmarks = productDao.getAllBookmarkedIds().firstOrNull().orEmpty()
-        if (currentBookmarks.contains(productId)) {
-            productDao.deleteBookmark(productId)
-        } else {
-            productDao.insertBookmark(BookmarkEntity(productId))
+    override fun getCartItems(): Flow<List<Product>> {
+        return productDao.getCartItems().map { cartEntities ->
+            cartEntities.map { it.toProduct() }
         }
     }
 
-    // 3️⃣ Add item to cart
-    override suspend fun addToCart(productId: String, quantity: Int) {
-        productDao.addToCart(CartEntity(productId, quantity))
+    override suspend fun updateCartProduct(product: Product) {
+        if (product.cartQuantity > 0) productDao.insertCartItem(product.toCartEntity())
+        else productDao.deleteCartItem(product.id)
     }
 
-    // 4️⃣ Remove item from cart
     override suspend fun removeFromCart(productId: String) {
-        productDao.removeFromCart(productId)
+        productDao.deleteCartItem(productId)
     }
 
-    // 5️⃣ Get all cart items
-    override fun getCartItems(): Flow<List<CartEntity>> {
-        return productDao.getAllCartItems()
+    override fun getBookmarks(): Flow<List<Product>> {
+        return productDao.getBookmarks().map { bookmarkEntities ->
+            bookmarkEntities.map { it.toProduct() }
+        }
     }
 
+    override suspend fun addToBookmarks(product: Product) {
+        productDao.insertBookmark(product.toBookmarkEntity())
+    }
+
+    override suspend fun removeFromBookmarks(productId: String) {
+        productDao.deleteBookmark(productId)
+    }
 }

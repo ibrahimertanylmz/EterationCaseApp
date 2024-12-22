@@ -1,5 +1,6 @@
 package com.eteration.presentation.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,7 @@ import com.eteration.app.databinding.ProductItemBinding
 import com.eteration.data.remote.model.ProductResponse
 import com.eteration.domain.model.Product
 
-class ProductAdapter(private val onclick: (Product) -> Unit) : PagingDataAdapter<Product, ProductAdapter.ProductViewHolder>(PRODUCT_COMPARATOR) {
+class ProductAdapter(private val onclick: (Product) -> Unit, private val onAddToCartClick: (Product) -> Unit ) : PagingDataAdapter<Product, ProductAdapter.ProductViewHolder>(PRODUCT_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val binding = ProductItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -21,13 +22,14 @@ class ProductAdapter(private val onclick: (Product) -> Unit) : PagingDataAdapter
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = getItem(position)
-        product?.let { holder.bind(it, onclick) }
+        product?.let { holder.bind(it, onclick, onAddToCartClick) }
     }
 
     class ProductViewHolder(private val binding: ProductItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(product: Product,onclick: (Product) -> Unit) {
+        @SuppressLint("DefaultLocale")
+        fun bind(product: Product, onclick: (Product) -> Unit, onAddToCartClick: (Product) -> Unit ) {
             binding.productTitle.text = product.name
-            binding.productPrice.text = product.price.toString()
+            binding.productPrice.text = String.format("%.2f ₺", product.price)
             Glide.with(binding.root)
                 .load(product.image)
                 .transition(DrawableTransitionOptions.withCrossFade())
@@ -37,6 +39,17 @@ class ProductAdapter(private val onclick: (Product) -> Unit) : PagingDataAdapter
 
             binding.root.setOnClickListener {
                 onclick(product)
+            }
+
+            if (product.isInCart) binding.addToCartButton.text = "In Your Cart"
+            else binding.addToCartButton.text = "Add to Cart"
+            binding.addToCartButton.setOnClickListener {
+                if (!product.isInCart){
+                    binding.addToCartButton.text = "In Your Cart"
+                    binding.addToCartButton.isClickable = false
+                    product.isInCart = true
+                    onAddToCartClick(product)
+                }
             }
         }
     }
