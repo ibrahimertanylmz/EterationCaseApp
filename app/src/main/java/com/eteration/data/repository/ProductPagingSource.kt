@@ -16,32 +16,41 @@ import java.io.IOException
 class ProductPagingSource(
     private val productService: ProductService,
     private val searchQuery: String?,
-    private val brand: String?,
+    private val brandList: List<String?>,
     private val productDao: ProductDao
 ) : PagingSource<Int, Product>() {
 
     private val bookmarkedIdsFlow =
         productDao.getBookmarks().map { it.map { product -> product.id } }
     private val inChartIdsFlow = productDao.getCartItems().map { it.map { product -> product.id } }
+    private var productResponse =  emptyList<Product>()
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Product> {
         val position = params.key ?: 1
 
-
         return try {
-            val productsResponse = productService.getProducts(
-                page = position,
-                limit = params.loadSize,
-                query = searchQuery,
-                brand = brand
-            ).map { it.toDomain() }
+            if (brandList.isEmpty()){
+                productResponse = productService.getProducts(
+                    page = position,
+                    limit = params.loadSize,
+                    query = searchQuery,
+                    brand = null
+                ).map { it.toDomain() }
+            }else {
+                productResponse = brandList.flatMap { brand ->
+                    productService.getProducts(
+                        page = position,
+                        limit = params.loadSize,
+                        query = searchQuery,
+                        brand = brand
+                    ).map { it.toDomain() }
+                }
+            }
 
-            // Collect bookmark and cart item ids to determine if a product is bookmarked or in the cart
             val bookmarkedIds = bookmarkedIdsFlow.first()
             val inChartIds = inChartIdsFlow.first()
 
-            // Map products and attach additional info (bookmarked, inCart)
-            val products = productsResponse.map { product ->
+            val products = productResponse.map { product ->
                 product.copy(
                     isBookmarked = bookmarkedIds.contains(product.id),
                     isInCart = inChartIds.contains(product.id)

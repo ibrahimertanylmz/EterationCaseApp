@@ -14,6 +14,7 @@ import com.eteration.domain.use_case.AddToBookmarksUseCase
 import com.eteration.domain.use_case.AddToCartUseCase
 import com.eteration.domain.use_case.GetBookmarksUseCase
 import com.eteration.domain.use_case.GetCartItemsUseCase
+import com.eteration.domain.use_case.GetProductsUseCase
 import com.eteration.domain.use_case.RemoveFromBookmarksUseCase
 import com.eteration.domain.use_case.RemoveFromCartUseCase
 import com.squareup.moshi.Moshi
@@ -74,8 +75,11 @@ object AppModule {
         return ProductRepositoryImpl(productService, productDao)
     }
 
+    @Provides
+    fun provideGetProductsUseCase(repository: ProductRepository): GetProductsUseCase {
+        return GetProductsUseCase(repository)
+    }
 
-    // Provide UseCase Instances
     @Provides
     fun provideGetCartItemsUseCase(repository: ProductRepository): GetCartItemsUseCase {
         return GetCartItemsUseCase(repository)

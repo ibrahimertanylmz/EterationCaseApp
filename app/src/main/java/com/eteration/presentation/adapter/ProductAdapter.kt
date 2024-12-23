@@ -1,6 +1,7 @@
 package com.eteration.presentation.adapter
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestOptions
+import com.eteration.app.R
 import com.eteration.app.databinding.ProductItemBinding
 import com.eteration.data.remote.model.ProductResponse
 import com.eteration.domain.model.Product
@@ -41,11 +44,18 @@ class ProductAdapter(private val onclick: (Product) -> Unit, private val onAddTo
                 onclick(product)
             }
 
-            if (product.isInCart) binding.addToCartButton.text = "In Your Cart"
-            else binding.addToCartButton.text = "Add to Cart"
+            if (product.isInCart){
+                binding.addToCartButton.setText(R.string.in_your_chart)
+                binding.addToCartButton.setBackgroundColor(Color.parseColor("#BABECC"))
+            }
+            else{
+                binding.addToCartButton.setText(R.string.add_to_cart)
+                binding.addToCartButton.setBackgroundColor(Color.parseColor("#2a59fe"))
+            }
             binding.addToCartButton.setOnClickListener {
                 if (!product.isInCart){
-                    binding.addToCartButton.text = "In Your Cart"
+                    binding.addToCartButton.setText(R.string.in_your_chart)
+                    binding.addToCartButton.setBackgroundColor(Color.parseColor("#BABECC"))
                     binding.addToCartButton.isClickable = false
                     product.isInCart = true
                     onAddToCartClick(product)

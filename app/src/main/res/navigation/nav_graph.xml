@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/fragmentProduct"
         android:name="com.eteration.presentation.ProductFragment"
-        android:label="@string/title_products"
+        android:label="@string/title_app"
         tools:layout="@layout/fragment_product">
         <action
             android:id="@+id/action_productFragment_to_productDetailsFragment"

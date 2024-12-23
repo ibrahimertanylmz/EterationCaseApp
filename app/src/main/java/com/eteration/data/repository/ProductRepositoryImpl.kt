@@ -25,7 +25,7 @@ class ProductRepositoryImpl @Inject constructor(
     private val productDao: ProductDao
 ) : ProductRepository {
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getProducts(nameFilter: String?, brandFilter: String?): Flow<PagingData<Product>> {
+    override fun getProducts(nameFilter: String?, brandFilter: List<String?>): Flow<PagingData<Product>> {
         val pager = Pager(
             config = PagingConfig(pageSize = 20, enablePlaceholders = false),
             pagingSourceFactory = {

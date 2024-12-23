@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingHorizontal="40dp"
+    android:paddingTop="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal">
 
@@ -33,11 +34,10 @@
         android:id="@+id/decreaseQuantityButton"
         android:layout_width="40dp"
         app:layout_constraintTop_toTopOf="parent"
-        android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/quantityText"
         android:layout_height="wrap_content"
-        android:text="-" />
+        android:text="@string/minus" />
 
 
     <TextView
@@ -47,6 +47,8 @@
         android:paddingHorizontal="20dp"
         android:paddingVertical="10dp"
         android:text="@string/quantity_text_ex"
+        android:background="@color/app_blue"
+        android:textColor="@color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/increaseQuantityButton" />
@@ -55,8 +57,7 @@
         android:id="@+id/increaseQuantityButton"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
-        android:text="+"
-        android:clickable="true"
+        android:text="@string/plus"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
