@@ -1,15 +1,12 @@
 package com.eteration.presentation.product_detail
 
-import androidx.lifecycle.viewModelScope
 import com.eteration.core.dispatchers.Dispatcher
 import com.eteration.core.viewmodel.BaseViewModel
 import com.eteration.domain.model.Product
-import com.eteration.domain.repository.ProductRepository
 import com.eteration.domain.use_case.AddToBookmarksUseCase
 import com.eteration.domain.use_case.AddToCartUseCase
 import com.eteration.domain.use_case.RemoveFromBookmarksUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
