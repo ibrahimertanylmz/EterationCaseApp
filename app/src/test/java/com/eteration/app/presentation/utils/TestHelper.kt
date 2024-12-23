@@ -18,17 +18,3 @@ fun <T> LiveData<T>.getOrAwaitValue(): T {
     this.removeObserver(observer)
     return data ?: throw NullPointerException("No value was set on LiveData")
 }
-
-private val testProduct = Product(
-    id = "1",
-    name = "Ford Fiesta",
-    image = "imageUrl",
-    price = 799.99,
-    description = "Best car ever.",
-    model = "2024",
-    brand = "Ford",
-    createdAt = "2024-12-23",
-    isBookmarked = false,
-    isInCart = false,
-    cartQuantity = 0
-)

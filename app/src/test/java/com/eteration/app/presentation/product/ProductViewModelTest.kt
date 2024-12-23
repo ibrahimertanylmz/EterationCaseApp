@@ -1,9 +1,7 @@
 package com.eteration.app.presentation.product
 
-import android.os.Looper
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.eteration.app.presentation.utils.TestCoroutineRule
-import com.eteration.app.presentation.utils.TestingDispatcher
 import com.eteration.core.dispatchers.Dispatcher
 import com.eteration.core.util.NetworkHelper
 import com.eteration.domain.model.Product
@@ -12,22 +10,12 @@ import com.eteration.domain.use_case.GetBookmarksUseCase
 import com.eteration.domain.use_case.GetCartItemsUseCase
 import com.eteration.domain.use_case.GetProductsUseCase
 import com.eteration.presentation.product.ProductViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
-import org.mockito.Mockito.mock
-import org.mockito.MockitoAnnotations
-import org.mockito.kotlin.whenever
-
 
 import androidx.lifecycle.Observer
 import androidx.paging.PagingData
