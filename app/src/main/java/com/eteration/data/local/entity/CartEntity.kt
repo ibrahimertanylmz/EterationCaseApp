@@ -1,10 +1,11 @@
-package com.eteration.data.local
+package com.eteration.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.eteration.common.Constant
 
-@Entity(tableName = "bookmarks")
-data class BookmarkEntity(
+@Entity(tableName = Constant.TABLE_CART)
+data class CartEntity(
     @PrimaryKey val id: String,
     val name: String,
     val image: String,
@@ -17,4 +18,3 @@ data class BookmarkEntity(
     val isInCart: Boolean,
     val chartQuantity: Int
 )
-

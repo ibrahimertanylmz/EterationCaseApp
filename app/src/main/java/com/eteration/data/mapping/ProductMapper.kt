@@ -1,8 +1,7 @@
 package com.eteration.data.mapping
 
-import com.eteration.data.local.BookmarkEntity
-import com.eteration.data.local.CartEntity
-import com.eteration.data.local.ProductEntity
+import com.eteration.data.local.entity.BookmarkEntity
+import com.eteration.data.local.entity.CartEntity
 import com.eteration.data.remote.model.ProductResponse
 import com.eteration.domain.model.Product
 
@@ -21,20 +20,6 @@ fun ProductResponse.toDomain(): Product {
         cartQuantity = 0
     )
 }
-
-
-fun ProductEntity.toDomain() = Product(
-    id = id,
-    name = name,
-    image = image,
-    price = price,
-    description = description,
-    model = model,
-    brand = brand,
-    createdAt = createdAt,
-    isBookmarked = isBookmarked,
-    isInCart = isInCart
-)
 
 
 fun Product.toCartEntity() = CartEntity(

@@ -14,13 +14,6 @@ interface ProductService {
         @Query("brand") brand: String? = null,
     ): List<ProductResponse>
 
-    @GET("products")
-    suspend fun getProductsFiltered(
-        @Query("page") page: Int,
-        @Query("limit") limit: Int,
-        @Query("category") category: String,
-    ): List<ProductResponse>
-
     @GET("products/{id}")
     suspend fun getProductById(@Path("id") id: String): ProductResponse
 }

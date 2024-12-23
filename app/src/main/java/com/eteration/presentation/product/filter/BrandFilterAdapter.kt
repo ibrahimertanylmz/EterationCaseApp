@@ -1,4 +1,4 @@
-package com.eteration.presentation.adapter
+package com.eteration.presentation.product.filter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -40,7 +40,6 @@ class BrandFilterAdapter : RecyclerView.Adapter<BrandFilterAdapter.BrandViewHold
             binding.checkboxBrand.isChecked = brand.isSelected
             binding.checkboxBrand.setOnCheckedChangeListener { _, isChecked ->
                 brand.isSelected = isChecked
-                //onBrandSelected(brand)
             }
         }
     }

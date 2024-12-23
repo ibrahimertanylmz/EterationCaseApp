@@ -1,10 +1,11 @@
-package com.eteration.data.local
+package com.eteration.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
+import com.eteration.data.local.entity.BookmarkEntity
+import com.eteration.data.local.entity.CartEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

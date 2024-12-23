@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/fragmentProduct"
-        android:name="com.eteration.presentation.ProductFragment"
+        android:name="com.eteration.presentation.product.ProductFragment"
         android:label="@string/title_app"
         tools:layout="@layout/fragment_product">
         <action
@@ -25,13 +25,13 @@
 
     <fragment
         android:id="@+id/productFilterFragment"
-        android:name="com.eteration.presentation.ProductFilterFragment"
+        android:name="com.eteration.presentation.product.filter.ProductFilterFragment"
         android:label="Filter"
         tools:layout="@layout/fragment_product_filter" />
 
     <fragment
         android:id="@+id/productDetailFragment"
-        android:name="com.eteration.presentation.ProductDetailFragment"
+        android:name="com.eteration.presentation.product_detail.ProductDetailFragment"
         android:label="Product Detail"
         tools:layout="@layout/fragment_product_detail">
         <argument
@@ -41,12 +41,12 @@
 
     <fragment
         android:id="@+id/cartFragment"
-        android:name="com.eteration.presentation.CartFragment"
+        android:name="com.eteration.presentation.cart.CartFragment"
         android:label="Cart" />
 
     <fragment
         android:id="@+id/favoritesFragment"
-        android:name="com.eteration.presentation.FavoritesFragment"
+        android:name="com.eteration.presentation.favorite_products.FavoritesFragment"
         android:label="Favorites">
         <action
             android:id="@+id/action_favoritesFragment_to_productDetailsFragment"

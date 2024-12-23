@@ -1,18 +1,14 @@
-package com.eteration.presentation
+package com.eteration.presentation.product.filter
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eteration.app.R
 import com.eteration.app.databinding.FragmentProductFilterBinding
 import com.eteration.domain.model.BrandFilterOption
-import com.eteration.presentation.adapter.BrandFilterAdapter
+import com.eteration.presentation.product.ProductViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,6 +18,7 @@ class ProductFilterFragment : BottomSheetDialogFragment(R.layout.fragment_produc
     private val viewModel: ProductViewModel by activityViewModels()
     private lateinit var binding: FragmentProductFilterBinding
 
+
     private var brandFilterAdapter= BrandFilterAdapter()
     private val brandFilterOptions = mutableListOf(
         BrandFilterOption("Lamborghini"),
@@ -30,15 +27,17 @@ class ProductFilterFragment : BottomSheetDialogFragment(R.layout.fragment_produc
         BrandFilterOption("Mercedes")
     )
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentProductFilterBinding.bind(view)
 
+        onInitUi()
+    }
+
+    private fun onInitUi() {
         binding.recyclerViewBrandFilter.visibility = View.VISIBLE
         binding.recyclerViewBrandFilter.layoutManager = LinearLayoutManager(requireContext())
-
 
         binding.updateFiltersButton.setOnClickListener {
             viewModel.updateFilter(brand = brandFilterOptions.filter { it.isSelected }.map { it.name })
@@ -51,9 +50,6 @@ class ProductFilterFragment : BottomSheetDialogFragment(R.layout.fragment_produc
                     brandFilterOption.isSelected = true
             }
         }
-
-        //brandFilterAdapter.submitList()
-
 
         binding.recyclerViewBrandFilter.adapter = brandFilterAdapter
         brandFilterAdapter.submitList(brandFilterOptions)

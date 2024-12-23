@@ -1,4 +1,4 @@
-package com.eteration.presentation.adapter
+package com.eteration.presentation.cart
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.eteration.app.databinding.CartItemBinding
+import com.eteration.core.util.PriceFormatter
 import com.eteration.domain.model.Product
 
 
@@ -47,17 +48,17 @@ class CartAdapter(
         fun bind(product: Product) {
             binding.apply {
                 productName.text = product.name
-                productPrice.text = String.format("%.2f ₺", product.price * product.cartQuantity)
+                productPrice.text = PriceFormatter.formatPriceWithQuantity(product.price, product.cartQuantity)
                 quantityText.text = product.cartQuantity.toString()
                 increaseQuantityButton.setOnClickListener {
                     product.cartQuantity += 1
-                    productPrice.text = String.format("%.2f ₺", product.price * product.cartQuantity)
+                    productPrice.text = PriceFormatter.formatPriceWithQuantity(product.price, product.cartQuantity)
                     quantityText.text = product.cartQuantity.toString()
                     onIncreaseClicked(product)
                 }
                 decreaseQuantityButton.setOnClickListener {
                     product.cartQuantity -= 1
-                    productPrice.text = String.format("%.2f ₺", product.price * product.cartQuantity)
+                    productPrice.text = PriceFormatter.formatPriceWithQuantity(product.price, product.cartQuantity)
                     if (product.cartQuantity != 0) quantityText.text = product.cartQuantity.toString()
                     onDecreaseClicked(product)
                 }

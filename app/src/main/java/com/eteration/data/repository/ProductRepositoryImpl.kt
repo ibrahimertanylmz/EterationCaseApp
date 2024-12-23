@@ -3,7 +3,7 @@ package com.eteration.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.eteration.data.local.ProductDao
+import com.eteration.data.local.dao.ProductDao
 import com.eteration.data.mapping.toBookmarkEntity
 import com.eteration.data.mapping.toCartEntity
 import com.eteration.data.mapping.toProduct
@@ -14,7 +14,6 @@ import com.eteration.domain.repository.ProductRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -42,10 +41,6 @@ class ProductRepositoryImpl @Inject constructor(
             .flatMapLatest {
                 pager.flow
             }
-    }
-
-    override suspend fun getProductsFiltered(category: String): Flow<PagingData<ProductResponse>> {
-        TODO("Not yet implemented")
     }
 
     override fun getCartItems(): Flow<List<Product>> {

@@ -1,13 +1,10 @@
-package com.eteration.presentation
+package com.eteration.presentation.favorite_products
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.eteration.core.dispatchers.Dispatcher
 import com.eteration.core.viewmodel.BaseViewModel
 import com.eteration.domain.model.Product
 import com.eteration.domain.repository.ProductRepository
-import com.eteration.domain.use_case.AddToBookmarksUseCase
 import com.eteration.domain.use_case.AddToCartUseCase
 import com.eteration.domain.use_case.GetBookmarksUseCase
 import com.eteration.domain.use_case.GetCartItemsUseCase
@@ -15,7 +12,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,7 +29,7 @@ class FavoritesViewModel @Inject constructor(
     val bookmarkItems: StateFlow<List<Product>?> get() = _bookmarkItems
 
     fun loadBookmarkItems() {
-        viewModelScope.launch {
+        launchOnDb {
             combine(
                 getBookmarksUseCase(),
                 getCartItemsUseCase()

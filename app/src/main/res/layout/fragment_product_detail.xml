@@ -11,7 +11,7 @@
 
         <variable
             name="viewModel"
-            type="com.eteration.presentation.ProductDetailViewModel" />
+            type="com.eteration.presentation.product_detail.ProductDetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

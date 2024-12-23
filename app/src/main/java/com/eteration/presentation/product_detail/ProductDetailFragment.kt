@@ -1,19 +1,16 @@
-package com.eteration.presentation
+package com.eteration.presentation.product_detail
 
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.eteration.app.R
-import com.eteration.app.databinding.FragmentProductBinding
 import com.eteration.app.databinding.FragmentProductDetailBinding
-import com.eteration.presentation.adapter.ProductAdapter
+import com.eteration.core.util.PriceFormatter
+import com.eteration.domain.model.Product
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,17 +24,30 @@ class ProductDetailFragment: Fragment(R.layout.fragment_product_detail) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentProductDetailBinding.bind(view)
+        val product = com.eteration.presentation.product_detail.ProductDetailFragmentArgs.fromBundle(
+            requireArguments()
+        ).product
 
-        val product = ProductDetailFragmentArgs.fromBundle(requireArguments()).product
+        onInitUi(product)
+    }
 
+    private fun onInitUi(product: Product) {
         binding.product = product
         Glide.with(binding.productImage).load(product.image).into(binding.productImage)
-        binding.productPrice.text = "Price :\n${String.format("%.2f ₺", product.price)}"
+        binding.productPrice.text = "Price :\n${PriceFormatter.formatPrice(product.price)}"
         if (product.isInCart){
             binding.buttonAddToCart.text = getString(R.string.in_your_chart)
             binding.buttonAddToCart.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.app_gray))
 
         }
+        onBookmarkState(product)
+
+        binding.buttonAddToCart.setOnClickListener {
+            onAddToCard(product)
+        }
+    }
+
+    private fun onBookmarkState(product: Product) {
         binding.addToBookmarkImage.setOnClickListener {
             product.isBookmarked = true
             binding.product = product
@@ -48,14 +58,14 @@ class ProductDetailFragment: Fragment(R.layout.fragment_product_detail) {
             product.isBookmarked = false
             binding.product = product
             viewModel.removeFromBookmarks(product.id)
-            //viewModel.toggleBookmark(product.id)
         }
+    }
 
-        binding.buttonAddToCart.setOnClickListener {
-            binding.buttonAddToCart.text = getString(R.string.in_your_chart)
-            binding.buttonAddToCart.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.app_gray))
-            viewModel.addToCart(product)
-        }
+    private fun onAddToCard(product: Product) {
+        binding.buttonAddToCart.text = getString(R.string.in_your_chart)
+        binding.buttonAddToCart.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.app_gray))
+        binding.buttonAddToCart.isClickable = false
+        viewModel.addToCart(product)
     }
 }
 

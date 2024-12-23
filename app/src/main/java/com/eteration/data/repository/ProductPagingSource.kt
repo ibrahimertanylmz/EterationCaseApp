@@ -2,13 +2,11 @@ package com.eteration.data.repository
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.eteration.data.local.ProductDao
+import com.eteration.data.local.dao.ProductDao
 import com.eteration.data.mapping.toDomain
-import com.eteration.data.remote.model.ProductResponse
 import com.eteration.data.remote.service.ProductService
 import com.eteration.domain.model.Product
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import retrofit2.HttpException
 import java.io.IOException
@@ -17,7 +15,7 @@ class ProductPagingSource(
     private val productService: ProductService,
     private val searchQuery: String?,
     private val brandList: List<String?>,
-    private val productDao: ProductDao
+    productDao: ProductDao
 ) : PagingSource<Int, Product>() {
 
     private val bookmarkedIdsFlow =

@@ -6,7 +6,6 @@ import com.eteration.domain.repository.ProductRepository
 import kotlinx.coroutines.flow.Flow
 
 class GetProductsUseCase(private val productRepository: ProductRepository) {
-
     fun execute(nameFilter: String? = null, brandFilter: List<String?> = emptyList()): Flow<PagingData<Product>> {
         return productRepository.getProducts(nameFilter, brandFilter)
     }

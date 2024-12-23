@@ -1,4 +1,4 @@
-package com.eteration.presentation.adapter
+package com.eteration.presentation.favorite_products
 
 import android.annotation.SuppressLint
 import android.graphics.Color
@@ -11,6 +11,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.eteration.app.R
 import com.eteration.app.databinding.ProductItemBinding
+import com.eteration.common.Constant
+import com.eteration.core.util.PriceFormatter
 import com.eteration.domain.model.Product
 
 class FavoriteProductAdapter(
@@ -51,7 +53,7 @@ class FavoriteProductAdapter(
         fun bind(product: Product) {
             binding.apply {
                 productTitle.text = product.name
-                productPrice.text = String.format("%.2f ₺", product.price)
+                productPrice.text = PriceFormatter.formatPrice(product.price)
 
                 Glide.with(root.context)
                     .load(product.image)
@@ -62,16 +64,16 @@ class FavoriteProductAdapter(
 
                 if (product.isInCart){
                     binding.addToCartButton.setText(R.string.in_your_chart)
-                    binding.addToCartButton.setBackgroundColor(Color.parseColor("#BABECC"))
+                    binding.addToCartButton.setBackgroundColor(Color.parseColor(Constant.IN_CART_COLOR_STRING))
                 }
                 else{
                     binding.addToCartButton.setText(R.string.add_to_cart)
-                    binding.addToCartButton.setBackgroundColor(Color.parseColor("#2a59fe"))
+                    binding.addToCartButton.setBackgroundColor(Color.parseColor(Constant.ADD_TO_CARD_COLOR_STRING))
                 }
 
                 binding.addToCartButton.setOnClickListener {
                     onAddToCartClick(product)
-                    binding.addToCartButton.setBackgroundColor(Color.parseColor("#BABECC"))
+                    binding.addToCartButton.setBackgroundColor(Color.parseColor(Constant.IN_CART_COLOR_STRING))
                     binding.addToCartButton.isClickable = false                }
 
                 root.setOnClickListener {

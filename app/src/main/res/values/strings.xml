@@ -25,4 +25,6 @@
     <string name="update_filters">Update Filters</string>
     <string name="brand">Brand</string>
     <string name="error_common">\"An unknown error occurred\"</string>
+    <string name="removed_product">\"Product has been removed from your chart!\"</string>
+    <string name="no_connection">No Internet Connection</string>
 </resources>

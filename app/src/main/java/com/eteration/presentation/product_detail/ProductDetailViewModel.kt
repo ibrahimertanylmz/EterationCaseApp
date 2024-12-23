@@ -1,4 +1,4 @@
-package com.eteration.presentation
+package com.eteration.presentation.product_detail
 
 import androidx.lifecycle.viewModelScope
 import com.eteration.core.dispatchers.Dispatcher
@@ -14,28 +14,26 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProductDetailViewModel @Inject constructor(
-    private val repository: ProductRepository,
     private val addToBookmarksUseCase: AddToBookmarksUseCase,
     private val removeFromBookmarksUseCase: RemoveFromBookmarksUseCase,
     private val addToCartUseCase: AddToCartUseCase,
     appDispatcher: Dispatcher
 ) : BaseViewModel(appDispatcher) {
 
-
     fun addToBookmarks(product: Product) {
-        viewModelScope.launch {
+        launchOnDb {
             addToBookmarksUseCase(product)
         }
     }
 
     fun removeFromBookmarks(productId: String) {
-        viewModelScope.launch {
+        launchOnDb {
             removeFromBookmarksUseCase(productId)
         }
     }
 
     fun addToCart(product: Product) {
-        viewModelScope.launch {
+        launchOnDb {
             product.cartQuantity += 1
             addToCartUseCase(product)
         }

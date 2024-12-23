@@ -1,4 +1,4 @@
-package com.eteration.presentation
+package com.eteration.presentation.product
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.eteration.core.dispatchers.Dispatcher
+import com.eteration.core.util.NetworkHelper
 import com.eteration.core.viewmodel.BaseViewModel
 import com.eteration.domain.model.FilterParams
 import com.eteration.domain.model.Product
@@ -32,8 +33,12 @@ class ProductViewModel @Inject constructor(
     private val addToCartUseCase: AddToCartUseCase,
     getBookmarksUseCase: GetBookmarksUseCase,
     getCartItemsUseCase: GetCartItemsUseCase,
+    private val networkHelper: NetworkHelper,
     appDispatcher: Dispatcher
 ) : BaseViewModel(appDispatcher) {
+
+    private val _isConnected = MutableLiveData<Boolean>()
+    val isConnected: LiveData<Boolean> = _isConnected
 
     private val bookmarkedIdsFlow = getBookmarksUseCase().map { it.map { product -> product.id } }
     private val inChartIdsFlow = getCartItemsUseCase().map { it.map { product -> product.id } }
@@ -43,6 +48,10 @@ class ProductViewModel @Inject constructor(
 
     private val _pagingSourceInvalidation = MutableLiveData<Unit>()
     val pagingSourceInvalidation: LiveData<Unit> get() = _pagingSourceInvalidation
+
+    init {
+        checkNetworkState()
+    }
 
     private fun invalidatePagingSource() {
         _pagingSourceInvalidation.postValue(Unit)
@@ -86,6 +95,10 @@ class ProductViewModel @Inject constructor(
             product.cartQuantity += 1
             addToCartUseCase(product)
         }
+    }
+
+    private fun checkNetworkState() {
+        _isConnected.value = networkHelper.isNetworkConnected()
     }
 
 }

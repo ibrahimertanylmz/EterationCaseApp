@@ -5,8 +5,10 @@ import androidx.room.Room
 import com.eteration.common.Constant
 import com.eteration.core.dispatchers.AppDispatcher
 import com.eteration.core.dispatchers.Dispatcher
+import com.eteration.core.util.NetworkHelper
+import com.eteration.core.util.NetworkHelperImpl
 import com.eteration.data.local.AppDatabase
-import com.eteration.data.local.ProductDao
+import com.eteration.data.local.dao.ProductDao
 import com.eteration.data.remote.service.ProductService
 import com.eteration.data.repository.ProductRepositoryImpl
 import com.eteration.domain.repository.ProductRepository
@@ -49,6 +51,11 @@ object AppModule {
     @Singleton
     fun provideAppDispatcher(): Dispatcher {
         return AppDispatcher()
+    }
+
+    @Provides
+    fun provideNetworkHelper(@ApplicationContext context: Context): NetworkHelper {
+        return NetworkHelperImpl(context)
     }
 
     @Provides

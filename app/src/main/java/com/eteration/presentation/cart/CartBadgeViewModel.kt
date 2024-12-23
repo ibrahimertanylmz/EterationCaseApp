@@ -1,4 +1,4 @@
-package com.eteration.presentation
+package com.eteration.presentation.cart
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,7 +14,7 @@ import javax.inject.Inject
 class CartBadgeViewModel @Inject constructor(private val getCartItemsUseCase: GetCartItemsUseCase) :
     ViewModel() {
 
-    private val _cartItemCount = MutableLiveData<Int>(0)
+    private val _cartItemCount = MutableLiveData(0)
     val cartItemCount: LiveData<Int> = _cartItemCount
 
     private val inChartIds = getCartItemsUseCase().map { it.map { product -> product.id } }

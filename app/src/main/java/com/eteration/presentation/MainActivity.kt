@@ -1,17 +1,14 @@
 package com.eteration.presentation
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.eteration.app.R
 import com.eteration.app.databinding.ActivityMainBinding
+import com.eteration.presentation.cart.CartBadgeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

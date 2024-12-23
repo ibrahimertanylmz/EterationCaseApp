@@ -1,29 +1,21 @@
-package com.eteration.presentation
+package com.eteration.presentation.favorite_products
 
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.eteration.app.R
 import com.eteration.app.databinding.FragmentFavoritesBinding
-import com.eteration.app.databinding.FragmentProductDetailBinding
 import com.eteration.domain.model.Product
-import com.eteration.presentation.adapter.FavoriteProductAdapter
-import com.eteration.presentation.adapter.ProductAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class FavoritesFragment: Fragment(R.layout.fragment_favorites) {
+class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
 
     private lateinit var binding: FragmentFavoritesBinding
     private val viewModel: FavoritesViewModel by viewModels()
@@ -35,31 +27,34 @@ class FavoritesFragment: Fragment(R.layout.fragment_favorites) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding = FragmentFavoritesBinding.bind(view)
+
+        onInitUi()
+        onInitObservers()
+    }
+
+    private fun onInitUi() {
         binding.rvFavorites.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvFavorites.adapter = adapter
         binding.rvFavorites.setHasFixedSize(true)
+    }
 
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            // Start collecting when the fragment's view is in the started state
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.bookmarkItems.collect { bookmarkItems ->
-                    if (bookmarkItems != null) {
-                        adapter.setFavorites(bookmarkItems)
-                    }
+    private fun onInitObservers() {
+        viewModel.launchOnMain {
+            viewModel.bookmarkItems.collect { bookmarkItems ->
+                if (bookmarkItems != null) {
+                    adapter.setFavorites(bookmarkItems)
                 }
             }
         }
-
-        // Load Bookmarks
         viewModel.loadBookmarkItems()
-
     }
 
     private fun onProductClick(product: Product) {
-        val action = FavoritesFragmentDirections.actionFavoritesFragmentToProductDetailsFragment(product)
+        val action =
+            com.eteration.presentation.favorite_products.FavoritesFragmentDirections.actionFavoritesFragmentToProductDetailsFragment(
+                product
+            )
         findNavController().navigate(action)
     }
 
