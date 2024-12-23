@@ -32,8 +32,6 @@ class FavoritesViewModelTest {
     private val dispatcher = TestingDispatcher()
     private val testDispatcher = StandardTestDispatcher()
 
-
-
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setup() {
