@@ -21,6 +21,9 @@ moshi = "1.12.0"
 room = "2.6.1"
 loggingInterceptor = "4.10.0"
 mockito = "5.3.1"
+mockk= "1.13.3"
+roboElectric = "4.9"
+mockitoKotlin = "5.0.0"
 coreTesting = "2.2.0"
 coroutinesTest = "1.7.3"
 turbine = "1.2.0"
@@ -50,7 +53,6 @@ hilt-viewmodel = { group = "com.google.dagger", name = "hilt-lifecycle-viewmodel
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 moshiConverter = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
 moshi = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
-moshiCodeGen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
 loggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "loggingInterceptor" }
 gsonConverter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 
@@ -71,6 +73,8 @@ androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecy
 
 #Testing
 mockito = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+mockitoKotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockitoKotlin" }
 coreTesting = { group = "androidx.arch.core", name = "core-testing", version.ref = "coreTesting" }
 coroutinesTest = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutinesTest" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }

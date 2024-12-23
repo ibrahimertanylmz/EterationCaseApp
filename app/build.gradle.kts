@@ -35,11 +35,11 @@ android {
         viewBinding = true
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
@@ -87,4 +87,12 @@ dependencies {
     implementation(libs.roomKtx)
     implementation(libs.roomRuntime)
     kapt(libs.roomCompiler)
+
+    //test
+    testImplementation(libs.mockk)
+    testImplementation(libs.mockitoKotlin)
+    testImplementation(libs.coreTesting)
+    testImplementation(libs.turbine)
+    testImplementation(libs.coroutinesTest)
+
 }

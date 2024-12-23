@@ -2,7 +2,6 @@ package com.eteration.data.remote.service
 
 import com.eteration.data.remote.model.ProductResponse
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ProductService {
@@ -13,7 +12,4 @@ interface ProductService {
         @Query("search") query: String? = null,
         @Query("brand") brand: String? = null,
     ): List<ProductResponse>
-
-    @GET("products/{id}")
-    suspend fun getProductById(@Path("id") id: String): ProductResponse
 }

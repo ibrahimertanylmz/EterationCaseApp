@@ -97,7 +97,7 @@ class ProductViewModel @Inject constructor(
         }
     }
 
-    private fun checkNetworkState() {
+    fun checkNetworkState() {
         _isConnected.value = networkHelper.isNetworkConnected()
     }
 
